@@ -1,7 +1,7 @@
 # Shoe Shop Database
 
 ## Project Overview
-This project is designed to model a shoe shop database. The database contains information about products, customers, orders, and the relationships between them. It includes tables for storing product details, customer data, orders, and sales transactions.
+This project is designed to model a shoe shop database. The database contains information about ProductType, ProductCategory, Product, Brand, ProductOption, customers, orders, and the relationships between them. It includes tables for storing product details, customer data, orders, and sales transactions.
 
 ## Database Schema
 
