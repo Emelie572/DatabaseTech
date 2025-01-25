@@ -26,10 +26,10 @@ The database contains the following key entities:
 ## SQL Scripts
 
 - **DDL Script**: A SQL file that creates the necessary tables and fills the database with sample data.
-  - 
+  - Available as https://github.com/Emelie572/Database_shoe_webshop/blob/main/Webshop_DDL.sql
   
 - **DML Script**: A SQL file that answers specific questions based on the database.
-  - Available as 
+  - Available as https://github.com/Emelie572/Database_shoe_webshop/blob/main/Webshop_DML.sql
 
 ## Sample Data
 
