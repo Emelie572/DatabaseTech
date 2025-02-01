@@ -8,6 +8,9 @@ public class Customer {
     private String userPassword;
     private String muniplicity;
 
+    public Customer() {
+    }
+
     public Customer(int customerId, String personalNumber, String firstName, String lastName, String userName, String userPassword, String muniplicity) {
         this.customerId = customerId;
         this.personalNumber = personalNumber;
