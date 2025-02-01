@@ -37,8 +37,6 @@ public class DatabaseConnection {
             customers.forEach(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()));
         }
         {
-
-
         }
 
     }
