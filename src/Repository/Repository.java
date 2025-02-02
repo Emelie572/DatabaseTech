@@ -12,6 +12,7 @@ public class Repository {
 
         List<Customer> getCustomers() throws IOException, SQLException {
 
+
         Properties p = new Properties();
         p.load(new FileInputStream("src/settings.properties"));
 
