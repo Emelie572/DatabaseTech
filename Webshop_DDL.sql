@@ -94,21 +94,22 @@ create index IX_product_name on Product(product_name); -- Då produktnamn använ
 create index IX_brand_name on Brand(brand_name); -- Eftersom användare ofta söker och filtrerar produkter på baserat på varumärke
 
 
-insert into ProductType(product_name)values
+-- Ersätt verklig data med generiska värden
+insert into ProductType(product_name) values
 ('Skor');
 
-insert into ProductCategory(product_category_name,product_type_id)values
-('Sneakers',1),
-('Loafers',1),
-('Boots',1),
-('Ballerinaskor',1),
-('Pumps',1),
-('Vandringsskor',1),
-('Män',1),
-('Kvinnor',1),
-('Barn',1);
+insert into ProductCategory(product_category_name, product_type_id) values
+('Sneakers', 1),
+('Loafers', 1),
+('Boots', 1),
+('Ballerinaskor', 1),
+('Pumps', 1),
+('Vandringsskor', 1),
+('Män', 1),
+('Kvinnor', 1),
+('Barn', 1);
 
-insert into Brand(brand_name)values
+insert into Brand(brand_name) values
 ('Adidas'),
 ('Puma'),
 ('Novita'),
@@ -116,98 +117,39 @@ insert into Brand(brand_name)values
 ('Wildflower'),
 ('STENK');
 
-insert into Product(product_name,product_price,brand_id)values
-('Adidas Barreda Sneakers',899,1),
-('Puma RX 737 Sneakers',999,2),
-('Novita Manarola Ballerina',1400,3),
-('Novita Noli Loafers',2100,3),
-('Salomon Outblast TS Kängor',1800,4),
-('Wildflower Dalston',450,5),
-('Novita Novara Gold Collection',1800,3),
-('STENK Vidfors Kängor Vibram',1300,6);
+insert into Product(product_name, product_price, brand_id) values
+('Adidas Barreda Sneakers', 899, 1),
+('Puma RX 737 Sneakers', 999, 2),
+('Novita Manarola Ballerina', 1400, 3),
+('Novita Noli Loafers', 2100, 3),
+('Salomon Outblast TS Kängor', 1800, 4),
+('Wildflower Dalston', 450, 5),
+('Novita Novara Gold Collection', 1800, 3),
+('STENK Vidfors Kängor Vibram', 1300, 6);
 
-insert into BelongTo(product_category_id,product_id)values
-(1,1),
-(1,2),
-(2,4),
-(3,5),
-(3,8),
-(4,3),
-(4,6),
-(5,7),
-(6,5),
-(6,8),
-(7,5),
-(8,1),
-(8,2),
-(8,3),
-(8,4),
-(8,7),
-(8,8),
-(9,6);
+-- Ändra känsliga kunddata till generiska värden
+insert into Customer(personal_number, first_name, last_name, muniplicity) values
+('0000000000', 'John', 'Doe', 'Test City'),
+('0000000001', 'Jane', 'Smith', 'Sample Town'),
+('0000000002', 'Alice', 'Johnson', 'Example City'),
+('0000000003', 'Bob', 'Brown', 'Demo Town'),
+('0000000004', 'Charlie', 'Davis', 'Test Village');
 
-insert into ProductOption(size,color,stock,product_id)values
-(36,'Svart',100,1),
-(37,'Svart',59,1),
-(38,'Svart',90,1),
-(39,'Svart',85,1),
-(36,'Vit',130,2),
-(37,'Vit',112,2),
-(38,'Vit',50,2),
-(39,'Vit',80,2),
-(36,'Vit',111,3),
-(37,'Vit',10,3),
-(38,'Vit',80,3),
-(39,'Vit',43,3),
-(36,'Svart',111,3),
-(37,'Svart',10,3),
-(38,'Svart',80,3),
-(39,'Svart',43,3),
-(36,'Lila',101,4),
-(37,'Lila',76,4),
-(38,'Lila',94,4),
-(39,'Lila',54,4),
-(42,'Grå',101,5),
-(43,'Grå',76,5),
-(44,'Grå',94,5),
-(45,'Grå',54,5),
-(31,'Rosa',33,6),
-(32,'Rosa',56,6),
-(33,'Rosa',69,6),
-(34,'Rosa',13,6),
-(36,'Vit',190,7),
-(37,'Vit',102,7),
-(38,'Vit',85,7),
-(39,'Vit',32,7),
-(36,'Brun',130,8),
-(37,'Brun',122,8),
-(38,'Brun',85,8),
-(39,'Brun',31,8);
+insert into CustomerOrder(order_date, total_price, customer_id) values
+('2024-05-11', 1349, 1),
+('2024-06-13', 1798, 2),
+('2024-06-14', 1400, 3),
+('2024-07-18', 999, 3),
+('2024-08-01', 450, 4),
+('2024-11-19', 450, 5),
+('2025-01-01', 1300, 5);
 
-insert into Customer(personal_number,first_name,last_name,muniplicity)values
-('8604121234','Eva','Andersson','Nacka'),
-('9205275678','Anna','Jonsson','Haninge'),
-('7810032345','Emma','Eriksson','Huddinge'),
-('7507146789','Lina','Svensson','Solna'),
-('9911123456','Klas','Borg','Södertälje');
-
-insert into CustomerOrder(order_date,total_price,customer_id)values
-('2024-05-11',1349,1),
-('2024-06-13',1798,2),
-('2024-06-14',1400,3),
-('2024-07-18',999,3),
-('2024-08-01',450,4),
-('2024-11-19',450,5),
-('2025-01-01',1300,5);
-
-insert into OrderItem(order_item_quantity,product_option_id,order_id)values
-(1,3,1),
-(1,25,1),
-(2,3,2),
-(1,12,3),
-(1,7,5),
-(1,29,4),
-(1,27,6),
-(1,33,7);
-
-
+insert into OrderItem(order_item_quantity, product_option_id, order_id) values
+(1, 3, 1),
+(1, 25, 1),
+(2, 3, 2),
+(1, 12, 3),
+(1, 7, 5),
+(1, 29, 4),
+(1, 27, 6),
+(1, 33, 7);
