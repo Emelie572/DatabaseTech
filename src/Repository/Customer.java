@@ -1,3 +1,5 @@
+package Repository;
+
 public class Customer {
 
     private int customerId;
@@ -77,4 +79,6 @@ public class Customer {
     public void setMuniplicity(String muniplicity) {
         this.muniplicity = muniplicity;
     }
+
+
 }

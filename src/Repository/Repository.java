@@ -1,3 +1,5 @@
+package Repository;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class DatabaseConnection {
+public class Repository {
 
-    public static void main(String[] args) throws IOException, SQLException {
+        List<Customer> getCustomers() throws IOException, SQLException {
 
         Properties p = new Properties();
         p.load(new FileInputStream("src/settings.properties"));
@@ -35,9 +37,8 @@ public class DatabaseConnection {
 
             }
             customers.forEach(customer -> System.out.println(customer.getFirstName() + " " + customer.getLastName()));
-        }
-        {
+            return customers;
         }
 
-    }
+        }
 }
