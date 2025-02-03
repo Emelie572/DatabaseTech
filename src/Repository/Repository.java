@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class Repository {
 
-        List<Customer> getCustomers() throws IOException, SQLException {
+    List<Customer> getCustomers() throws IOException, SQLException {
 
         Properties p = new Properties();
         p.load(new FileInputStream("src/settings.properties"));
@@ -20,8 +20,7 @@ public class Repository {
                 p.getProperty("password"));
 
              Statement s = c.createStatement();
-             ResultSet rs = s.executeQuery("select first_name,last_name from Customer"))
-        {
+             ResultSet rs = s.executeQuery("select first_name,last_name from Customer")) {
             List<Customer> customers = new ArrayList<>();
             while (rs.next()) {
                 Customer customer = new Customer();
@@ -39,7 +38,7 @@ public class Repository {
             return customers;
         }
 
-        }
+    }
 
 
     List<ProductCategory> getCategories(String categoryName) throws IOException, SQLException {
@@ -75,4 +74,39 @@ public class Repository {
 
     }
 
+
+    List<Product> getProductByCategory(String productName) throws IOException, SQLException {
+
+        Properties p = new Properties();
+        p.load(new FileInputStream("src/settings.properties"));
+
+        try (Connection c = DriverManager.getConnection(
+                p.getProperty("connectionString"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+
+             PreparedStatement stmt = c.prepareStatement("select Product.product_id, Product.product_name, Product.product_price from Product " +
+                     "join BelongTo on Product.product_id = BelongTo.product_id  " +
+                     "join ProductCategory on BelongTo.product_category_id = ProductCategory.product_category_id " +
+                     "where product_category_name = ?")
+
+
+        ) {
+
+            stmt.setString(1, productName);
+            ResultSet rs = stmt.executeQuery();
+            List<Product> productsByCategory = new ArrayList<>();
+
+            while (rs.next()) {
+                Product products = new Product(
+                        rs.getInt("product_id"),
+                        rs.getString("product_name"),
+                        rs.getDouble("product_price"));
+                productsByCategory.add(products);
+
+            }
+            return productsByCategory;
+        }
+
+    }
 }
