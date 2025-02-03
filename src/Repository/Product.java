@@ -1,3 +1,5 @@
+package Repository;
+
 public class Product {
 
     private int productId;

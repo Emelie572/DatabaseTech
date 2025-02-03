@@ -1,3 +1,5 @@
+package Repository;
+
 public class ProductCategory {
 
     private int productCategoryId;
