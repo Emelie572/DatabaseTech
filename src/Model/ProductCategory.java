@@ -1,10 +1,18 @@
-package Repository;
+package Model;
 
 public class ProductCategory {
 
     private int productCategoryId;
     private String productCategoryName;
 
+
+    public ProductCategory() {
+    }
+
+    public ProductCategory(int productCategoryId, String productCategoryName) {
+        this.productCategoryId = productCategoryId;
+        this.productCategoryName = productCategoryName;
+    }
 
     public int getProductCategoryId() {
         return productCategoryId;
@@ -22,10 +30,4 @@ public class ProductCategory {
         this.productCategoryName = productCategoryName;
     }
 
-    public ProductCategory(int productCategoryId, String productCategoryName) {
-        this.productCategoryId = productCategoryId;
-        this.productCategoryName = productCategoryName;
-
-
-    }
 }

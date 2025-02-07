@@ -1,4 +1,4 @@
-package Repository;
+package Model;
 
 public class Customer {
 
@@ -80,5 +80,10 @@ public class Customer {
         this.muniplicity = muniplicity;
     }
 
-
+    @Override
+    public String toString() {
+        return "Välkommen " + firstName + " " + lastName;
+    }
 }
+
+

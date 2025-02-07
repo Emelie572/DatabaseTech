@@ -1,16 +1,16 @@
 # Shoe Shop Database
 
 ## Project Overview
-This project is designed to model a shoe shop database. The database contains information about ProductType, ProductCategory, Product, Brand, ProductOption, customers, orders, and the relationships between them. It includes tables for storing product details, customer data, orders, and sales transactions.
+This project is designed to model a shoe shop database. The database contains information about Model.ProductType, Model.ProductCategory, Model.Product, Model.Brand, Model.ProductOption, customers, orders, and the relationships between them. It includes tables for storing product details, customer data, orders, and sales transactions.
 
 ## Database Schema
 
 The database contains the following key entities:
-- **ProductType**:
-- **ProductCategory**: 
-- **Product**:
-- **Brand**:
-- **ProductOption**:
+- **Model.ProductType**:
+- **Model.ProductCategory**: 
+- **Model.Product**:
+- **Model.Brand**:
+- **Model.ProductOption**:
 - **Customers**: Data on customers, such as their names and location.
 - **Orders**: Orders made by customers, including the total price.
 - **OrderItems**: Details of products ordered in each order.
@@ -26,10 +26,10 @@ The database contains the following key entities:
 ## SQL Scripts
 
 - **DDL Script**: A SQL file that creates the necessary tables and fills the database with sample data.
-  - Available as https://github.com/Emelie572/Database_shoe_webshop/blob/main/Webshop_DDL.sql
+  - Available as https://github.com/Emelie572/Database_shoe_webshop/blob/program/Webshop_DDL.sql
   
 - **DML Script**: A SQL file that answers specific questions based on the database.
-  - Available as https://github.com/Emelie572/Database_shoe_webshop/blob/main/Webshop_DML.sql
+  - Available as https://github.com/Emelie572/Database_shoe_webshop/blob/program/Webshop_DML.sql
 
 ## Sample Data
 

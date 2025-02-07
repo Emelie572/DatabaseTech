@@ -1,7 +1,12 @@
+package Model;
+
 public class ProductType {
 
     private int productId;
     private String productTypeName;
+
+    public ProductType() {
+    }
 
     public int getProductId() {
         return productId;
@@ -22,7 +27,10 @@ public class ProductType {
     public ProductType(int productId, String productTypeName) {
         this.productId = productId;
         this.productTypeName = productTypeName;
+    }
 
-
+    @Override
+    public String toString() {
+        return productTypeName;
     }
 }
