@@ -1,3 +1,5 @@
+package Model;
+
 public class Customer {
 
     private int customerId;
@@ -77,4 +79,11 @@ public class Customer {
     public void setMuniplicity(String muniplicity) {
         this.muniplicity = muniplicity;
     }
+
+    @Override
+    public String toString() {
+        return "Välkommen " + firstName + " " + lastName;
+    }
 }
+
+

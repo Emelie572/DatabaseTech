@@ -1,9 +1,32 @@
+package Model;
+
 public class ProductOption {
 
     private int productOptionId;
     private int size;
     private String color;
     private int stock;
+    private int productId;
+
+
+    public ProductOption() {
+    }
+
+    public ProductOption(int productOptionId, int size, String color, int stock, int productId) {
+        this.productOptionId = productOptionId;
+        this.size = size;
+        this.color = color;
+        this.stock = stock;
+        this.productId = productId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
 
     public int getProductOptionId() {
         return productOptionId;
@@ -37,12 +60,4 @@ public class ProductOption {
         this.stock = stock;
     }
 
-    public ProductOption(int productOptionId, int size, String color, int stock) {
-        this.productOptionId = productOptionId;
-        this.size = size;
-        this.color = color;
-        this.stock = stock;
-
-
-    }
 }
