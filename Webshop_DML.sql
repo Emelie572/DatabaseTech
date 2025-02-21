@@ -55,4 +55,3 @@ inner join Customer on CustomerOrder.customer_id = Customer.customer_id
 group by date_format(CustomerOrder.order_date,'%y/%m')
 order by TotalSales desc
 limit 1;
-
