@@ -8,6 +8,8 @@ public class ProductType {
     public ProductType() {
     }
 
+
+
     public int getProductId() {
         return productId;
     }

@@ -1,0 +1,45 @@
+package Program;
+
+import Controller.CustomerController;
+import Controller.OrderController;
+import Controller.ProductController;
+import Model.*;
+import Repository.CustomerRepository;
+import Repository.OrderRepository;
+import Repository.ProductRepository;
+import View.CustomerView;
+import View.OrderView;
+import View.ProductView;
+import java.util.Scanner;
+
+public class RunProgram {
+
+    public void startApp() {
+        Scanner scanner = new Scanner(System.in);
+
+        CustomerRepository customerRepository = new CustomerRepository();
+        OrderRepository orderRepository = new OrderRepository();
+        ProductRepository productRepository = new ProductRepository();
+
+        CustomerView customerView = new CustomerView(scanner);
+        OrderView orderView = new OrderView(scanner);
+        ProductView productView = new ProductView(scanner);
+
+        OrderController orderController = new OrderController(null, orderRepository, orderView);
+        ProductController productController = new ProductController(productRepository, productView, orderController);
+
+        orderController.setProductController(productController);
+
+        CustomerController customerController = new CustomerController(customerRepository, customerView);
+        customerController.handleInputLogin();
+
+        productController.productFlow();
+        orderController.prepareOrder();
+        orderController.askContinueShopping();
+    }
+
+    public static void main(String[] args) {
+        RunProgram runProgram = new RunProgram();
+        runProgram.startApp();
+    }
+}

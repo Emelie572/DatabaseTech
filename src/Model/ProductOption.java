@@ -60,4 +60,10 @@ public class ProductOption {
         this.stock = stock;
     }
 
+
+    @Override
+    public String toString() {
+        return "Färg: " + color + " - Storlek: " + size;
+    }
 }
+
