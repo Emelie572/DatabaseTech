@@ -38,10 +38,5 @@ public class ProductView implements MessageDisplay {
     public void showProducts(List<Product> products) {
         products.forEach(product -> System.out.println("- " + product.getProductName()));
     }
-
-    public void showProductOptions(List<ProductOption> productOptions) {
-        productOptions.forEach(option ->
-                System.out.println("- Färg: " + option.getColor() + ", Storlek: " + option.getSize()));
-    }
 }
 
