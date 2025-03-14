@@ -13,21 +13,18 @@ import java.util.List;
 public class ProductController {
     private final ProductRepository productRepository;
     private final ProductView productView;
-    private final OrderController orderController;
     private Product selectedProduct;
     private String selectedColor;
-    private String productOption;
     private int selectedSize;
 
 
-    public ProductController(ProductRepository productRepository, ProductView productView, OrderController orderController) {
+    public ProductController(ProductRepository productRepository, ProductView productView) {
         this.productRepository = productRepository;
         this.productView = productView;
-        this.orderController = orderController;
     }
 
     public void productFlow() {
-        ProductType productType = getProductType();
+        final ProductType productType = getProductType();
         ProductType selectedProductType = chooseProductType(productType);
 
         List<ProductCategory> productCategories = getProductCategories(selectedProductType);
@@ -114,13 +111,12 @@ public class ProductController {
         productOptions.stream()
                 .map(ProductOption::getColor)
                 .distinct()
-                .forEach(color -> productView.displayMessage(color));  // Visa alla färger
+                .forEach(color -> productView.displayMessage(color));
 
         ProductOption selectedOption = null;
 
-        // Be om användarens färgval
         while (selectedOption == null) {
-            String colorChoice = productView.getUserInput(ProductMessage.CHOOSE_COLOR); // Be om färgval
+            String colorChoice = productView.getUserInput(ProductMessage.CHOOSE_COLOR);
 
             if (colorChoice == null || colorChoice.trim().isEmpty()) {
                 productView.displayMessage(ErrorMessage.COLOR_NOT_FOUND.getMessage());
@@ -143,7 +139,7 @@ public class ProductController {
         productOptions.stream()
                 .map(option -> String.valueOf(option.getSize()))
                 .distinct()
-                .forEach(size -> productView.displayMessage(size));  // Visa alla storlekar
+                .forEach(size -> productView.displayMessage(size));
 
         ProductOption selectedOption = null;
 

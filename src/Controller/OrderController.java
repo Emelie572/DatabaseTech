@@ -11,7 +11,7 @@ import Enum.ProductMessage;
 
 public class OrderController {
 
-    private ProductController productController;
+    private final ProductController productController;
     private final OrderRepository orderRepository;
     private final OrderView orderView;
 
@@ -19,10 +19,6 @@ public class OrderController {
         this.productController = productController;
         this.orderRepository = orderRepository;
         this.orderView = orderView;
-    }
-
-    public void setProductController(ProductController productController) {
-        this.productController = productController;
     }
 
     public Integer getOrderId(int customerId) {

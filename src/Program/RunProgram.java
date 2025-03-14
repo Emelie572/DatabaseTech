@@ -25,10 +25,9 @@ public class RunProgram {
         OrderView orderView = new OrderView(scanner);
         ProductView productView = new ProductView(scanner);
 
-        OrderController orderController = new OrderController(null, orderRepository, orderView);
-        ProductController productController = new ProductController(productRepository, productView, orderController);
+        ProductController productController = new ProductController(productRepository, productView);
+        OrderController orderController = new OrderController(productController, orderRepository, orderView);
 
-        orderController.setProductController(productController);
 
         CustomerController customerController = new CustomerController(customerRepository, customerView);
         customerController.handleInputLogin();
