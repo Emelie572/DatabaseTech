@@ -27,14 +27,11 @@ public class RunProgram {
 
         ProductController productController = new ProductController(productRepository, productView);
         OrderController orderController = new OrderController(productController, orderRepository, orderView);
-
-
         CustomerController customerController = new CustomerController(customerRepository, customerView);
-        customerController.handleInputLogin();
 
+        customerController.handleInputLogin();
         productController.productFlow();
-        orderController.prepareOrder();
-        orderController.askContinueShopping();
+        orderController.orderFlow();
     }
 
     public static void main(String[] args) {

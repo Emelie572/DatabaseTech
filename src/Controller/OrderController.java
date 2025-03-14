@@ -33,6 +33,11 @@ public class OrderController {
     }
 
 
+    public void orderFlow() {
+        prepareOrder();
+        askContinueShopping();
+    }
+
     public void prepareOrder() {
         List<CustomerOrder> customer = orderRepository.getCustomerOrderData();
         Product selectedProduct = productController.getSelectedProduct();
@@ -61,13 +66,11 @@ public class OrderController {
             if (input.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
                 productController.productFlow();
                 break;
-
             } else if (input.equalsIgnoreCase(OrderMessage.ORDER_READY_TO_PAY.getMessage())) {
+                orderView.displayMessage(OrderMessage.FINAL_PRODUCTS.getMessage());
+                System.out.println(productController.getSelectedProduct().getProductName()  + "," + productController.getSelectedColor() + "," + productController.getSelectedSize());
                 handlePayment();
                 break;
-
-            } else {
-                orderView.displayMessage(ErrorMessage.TRY_AGAIN.getMessage());
             }
         }
     }
