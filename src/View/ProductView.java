@@ -19,7 +19,7 @@ public class ProductView implements MessageDisplay {
 
     public String getUserInput(ProductMessage prompt) {
         System.out.println(prompt.getMessage());
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     @Override

@@ -14,7 +14,7 @@ public class CustomerView implements MessageDisplay {
 
     public String getUserInput(LoginMessage prompt) {
         displayMessage(prompt);
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public void displayMessage(LoginMessage message) {

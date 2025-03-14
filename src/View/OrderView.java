@@ -14,7 +14,7 @@ public class OrderView implements MessageDisplay {
 
     public String getUserInput(OrderMessage prompt) {
         System.out.println(prompt.getMessage());
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     @Override
