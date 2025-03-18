@@ -6,13 +6,21 @@ Database Schema
 The database contains the following key entities:
 
 Model.ProductType: Defines the types of products available (e.g., shoes, sandals, boots).
+
 Model.ProductCategory: Categorizes products into specific groups.
+
 Model.Product: Contains details about each product, including pricing and availability.
+
 Model.Brand: Information about the brands of the products sold.
+
 Model.ProductOption: Variations in products, such as size, color, etc.
+
 Customers: Data on customers, such as their names, email, and location.
+
 Orders: Orders made by customers, including the total price and status.
+
 OrderItems: Details of products ordered in each order.
+
 Database Design
 ER Diagram: A visual representation of the database entities, relationships, and attributes.
 Relations Model: Describes the tables, columns, and relationships in the database.
