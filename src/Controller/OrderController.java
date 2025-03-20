@@ -22,16 +22,13 @@ public class OrderController {
     }
 
     public Integer getOrderId(int customerId) {
-        List<CustomerOrder> customerOrders = orderRepository.getCustomerOrderData();
-
-        for (CustomerOrder order : customerOrders) {
-            if (order.getCustomerId() == customerId && OrderStatus.ACTIVE_ORDER.getMessage().equals(order.getOrderStatus())) {
-                return order.getOrderId();
-            }
-        }
-        return null;
+        return orderRepository.getCustomerOrderData().stream()
+                .filter(order -> order.getCustomerId() == customerId &&
+                        OrderStatus.ACTIVE_ORDER.getMessage().equals(order.getOrderStatus()))
+                .map(CustomerOrder::getOrderId)
+                .findFirst()
+                .orElse(null);
     }
-
 
     public void orderFlow() {
         prepareOrder();
@@ -60,20 +57,24 @@ public class OrderController {
 
 
     public void askContinueShopping() {
-        while (true) {
-            final String input = orderView.getUserInput(OrderMessage.ORDER_CONTINUE_SHOPPING);
+        String input = orderView.getUserInput(OrderMessage.ORDER_CONTINUE_SHOPPING);
 
-            if (input.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
-                productController.productFlow();
-                break;
-            } else if (input.equalsIgnoreCase(OrderMessage.ORDER_READY_TO_PAY.getMessage())) {
-                orderView.displayMessage(OrderMessage.FINAL_PRODUCTS.getMessage());
-                System.out.println(productController.getSelectedProduct().getProductName()  + "," + productController.getSelectedColor() + "," + productController.getSelectedSize());
-                handlePayment();
-                break;
-            }
+        if (input.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
+            productController.productFlow();
+        } else if (input.equalsIgnoreCase(OrderMessage.ORDER_READY_TO_PAY.getMessage())) {
+            displayFinalOrder();
+            handlePayment();
         }
     }
+
+    public void displayFinalOrder() {
+        orderView.displayMessage(OrderMessage.FINAL_PRODUCTS.getMessage());
+        String productDetails = productController.getSelectedProduct().getProductName() + ", " +
+                productController.getSelectedColor() + ", " +
+                productController.getSelectedSize();
+        orderView.displayMessage(productDetails);
+    }
+
 
     public void handlePayment() {
         final String inputPay = orderView.getUserInput(OrderMessage.ORDER_PAY);

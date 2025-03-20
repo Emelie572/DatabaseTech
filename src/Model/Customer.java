@@ -8,19 +8,19 @@ public class Customer {
     private String lastName;
     private String userName;
     private String userPassword;
-    private String muniplicity;
+    private String municipality;
 
     public Customer() {
     }
 
-    public Customer(int customerId, String personalNumber, String firstName, String lastName, String userName, String userPassword, String muniplicity) {
+    public Customer(int customerId, String personalNumber, String firstName, String lastName, String userName, String userPassword, String municipality) {
         this.customerId = customerId;
         this.personalNumber = personalNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.userPassword = userPassword;
-        this.muniplicity = muniplicity;
+        this.municipality = municipality;
     }
 
 
@@ -34,10 +34,6 @@ public class Customer {
 
     public String getPersonalNumber() {
         return personalNumber;
-    }
-
-    public void setPersonalNumber(String personalNumber) {
-        this.personalNumber = personalNumber;
     }
 
     public String getFirstName() {
@@ -72,12 +68,12 @@ public class Customer {
         this.userPassword = userPassword;
     }
 
-    public String getMuniplicity() {
-        return muniplicity;
+    public String getMunicipality() {
+        return municipality;
     }
 
-    public void setMuniplicity(String muniplicity) {
-        this.muniplicity = muniplicity;
+    public void setMunicipality(String municipality) {
+        this.municipality = municipality;
     }
 
     @Override

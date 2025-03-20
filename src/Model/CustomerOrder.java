@@ -11,10 +11,6 @@ public class CustomerOrder {
     private double totalPrice;
     private int customerId;
 
-
-    public CustomerOrder() {
-    }
-
     public CustomerOrder(int orderId, Date orderDate, String orderStatus, double totalPrice, int customerId) {
         this.orderId = orderId;
         this.orderDate = orderDate;

@@ -15,20 +15,27 @@ public class CustomerController {
         this.customerView = customerView;
     }
 
-        public void handleInputLogin() {
-            while (true) {
-                final String userName = customerView.getUserInput(LoginMessage.LOGIN_USERNAME);
-                final String userPassword = customerView.getUserInput(LoginMessage.LOGIN_PASSWORD);
+    public void handleInputLogin() {
+        boolean loginSuccess = false;
 
-                Customer customer = customerRepository.getLoginData(userName, userPassword);
+        while (!loginSuccess) {
+            String userName = customerView.getUserInput(LoginMessage.LOGIN_USERNAME);
+            String userPassword = customerView.getUserInput(LoginMessage.LOGIN_PASSWORD);
 
-                if (customer != null) {
-                    customerView.showCustomerInfo(customer.getFirstName() + " " + customer.getLastName());
-                    break;
-                } else {
-                    customerView.displayMessage(LoginMessage.LOGIN_WRONG);
-                }
-            }
+            loginSuccess = attemptLogin(userName, userPassword);
         }
     }
+
+    private boolean attemptLogin(String userName, String userPassword) {
+        Customer customer = customerRepository.getLoginData(userName, userPassword);
+
+        if (customer != null) {
+            customerView.showCustomerInfo(customer.getFirstName() + " " + customer.getLastName());
+            return true;
+        } else {
+            customerView.displayMessage(LoginMessage.LOGIN_WRONG);
+            return false;
+        }
+    }
+}
 
