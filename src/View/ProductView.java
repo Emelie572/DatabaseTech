@@ -18,8 +18,12 @@ public class ProductView implements MessageDisplay {
     }
 
     public String getUserInput(ProductMessage prompt) {
-        System.out.println(prompt.getMessage());
+        displayMessage(prompt);
         return scanner.nextLine().trim();
+    }
+
+    public void displayMessage(ProductMessage message) {
+        System.out.println(message.getMessage());
     }
 
     @Override

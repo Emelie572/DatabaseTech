@@ -29,7 +29,7 @@ public class RunProgram {
         OrderController orderController = new OrderController(productController, orderRepository, orderView);
         CustomerController customerController = new CustomerController(customerRepository, customerView);
 
-        customerController.handleInputLogin();
+        customerController.processLogin();
         productController.productFlow();
         orderController.orderFlow();
     }

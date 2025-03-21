@@ -15,27 +15,34 @@ public class CustomerController {
         this.customerView = customerView;
     }
 
-    public void handleInputLogin() {
-        boolean loginSuccess = false;
+    public void processLogin() {
+        final int MAX_ATTEMPTS = 3;
+        int attempts = 0;
 
-        while (!loginSuccess) {
+        while (attempts < MAX_ATTEMPTS) {
             String userName = customerView.getUserInput(LoginMessage.LOGIN_USERNAME);
             String userPassword = customerView.getUserInput(LoginMessage.LOGIN_PASSWORD);
 
-            loginSuccess = attemptLogin(userName, userPassword);
+            if (authenticateUser(userName, userPassword)) {
+                return;
+            }
+            attempts++;
+            customerView.displayMessage(LoginMessage.LOGIN_WRONG);
         }
+        customerView.displayMessage(LoginMessage.FAILED_ATTEMPTS);
     }
 
-    private boolean attemptLogin(String userName, String userPassword) {
+
+    private boolean authenticateUser(String userName, String userPassword) {
         Customer customer = customerRepository.getLoginData(userName, userPassword);
 
-        if (customer != null) {
-            customerView.showCustomerInfo(customer.getFirstName() + " " + customer.getLastName());
-            return true;
-        } else {
-            customerView.displayMessage(LoginMessage.LOGIN_WRONG);
+        if (customer == null) {
             return false;
         }
+
+        customerView.showCustomerInfo(customer.getFirstName() + " " + customer.getLastName());
+        return true;
     }
 }
+
 
