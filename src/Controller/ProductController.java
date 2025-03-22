@@ -17,6 +17,10 @@ public class ProductController {
         this.productView = productView;
     }
 
+    public List<ProductOption> getProductOptions(Product selectedProduct) {
+        return productRepository.getProductOptionData(selectedProduct.getProductName());
+    }
+
     public ProductType chooseProductType() {
         productView.showProductTypes(getProductType());
         String selectedProductType = getUserInput(ProductMessage.CHOOSE_PRODUCT_TYPE);
@@ -40,36 +44,31 @@ public class ProductController {
     }
 
     public ProductOption chooseProductOption(Product selectedProduct) {
-        List<ProductOption> productOptions = productRepository.getProductOptionData(selectedProduct.getProductName());
+        List<ProductOption> productOptions = getProductOptions(selectedProduct);
 
-        String inputColor = productView.getColorInput();
-        String inputSize = productView.getSizeInput();
+        productView.showItems(productOptions);
 
-        ProductOption selectedProductOption = findProductOption(inputColor, inputSize, productOptions);
+        String chosenColor = getUserInput(ProductMessage.CHOOSE_COLOR);
+        int chosenSize = getValidSize(ProductMessage.CHOOSE_SIZE);
 
-        if (selectedProductOption == null) {
-            productView.showErrorMessage(ErrorMessage.COLOR_NOT_FOUND);
-            return null;
-        }
-
-        productView.displayMessage(ProductMessage.CHOSEN_PRODUCT + ": " + selectedProductOption);
-        return selectedProductOption;
+        return productOptions.stream()
+                .filter(option -> option.getColor().equalsIgnoreCase(chosenColor) && option.getSize() == chosenSize)
+                .findFirst()
+                .orElseGet(() -> {
+                    productView.showErrorMessage(ErrorMessage.PRODUCT_OPTION_NOT_FOUND);
+                    return null;
+                });
     }
 
-    public ProductOption findProductOption(String color, String size, List<ProductOption> productOptions) {
-        int sizeInt;
-        try {
-            sizeInt = Integer.parseInt(size);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-
-        for (ProductOption option : productOptions) {
-            if (option.getColor().equalsIgnoreCase(color) && option.getSize() == sizeInt) {
-                return option;
+    private int getValidSize(ProductMessage message) {
+        while (true) {
+            String input = getUserInput(message);
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                productView.showErrorMessage(ErrorMessage.INVALID_INPUT);
             }
         }
-        return null;
     }
 
     public <T extends Name> T chooseFromList(List<T> items, ProductMessage message, ErrorMessage errorMessage) {
@@ -99,7 +98,6 @@ public class ProductController {
         }
         return null;
     }
-
 
     public ProductOption finalProduct() {
         ProductType productType = chooseProductType();

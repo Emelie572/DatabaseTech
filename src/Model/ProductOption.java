@@ -1,6 +1,8 @@
 package Model;
 
-public class ProductOption {
+import Interface.Name;
+
+public class ProductOption implements Name {
 
     private int productOptionId;
     private int size;
@@ -62,8 +64,13 @@ public class ProductOption {
 
 
     @Override
+    public String getName() {
+        return color + " " + size;
+    }
+
+    @Override
     public String toString() {
-        return "Färg: " + color + " - Storlek: " + size;
+        return getName();
     }
 }
 

@@ -22,7 +22,6 @@ public class CustomerView implements MessageDisplay {
 
     public void showCustomerInfo(String customerName) {
         displayMessage(LoginMessage.LOGIN_RIGHT);
-        System.out.println(customerName);
     }
 
     @Override

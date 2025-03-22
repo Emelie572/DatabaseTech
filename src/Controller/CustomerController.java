@@ -24,7 +24,6 @@ public class CustomerController {
             String userPassword = customerView.getUserInput(LoginMessage.LOGIN_PASSWORD);
 
             if (authenticateUser(userName, userPassword)) {
-                customerView.displayMessage(LoginMessage.LOGIN_RIGHT);
                 return;
             }
 

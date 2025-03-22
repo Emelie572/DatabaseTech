@@ -34,6 +34,7 @@ public class OrderController {
         orderView.displayMessage(OrderMessage.ORDER_ADD_UPDATE);
     }
 
+
     public void prepareOrder() {
         final Customer customer = customerController.getLoggedInCustomer();
 
@@ -42,29 +43,23 @@ public class OrderController {
             return;
         }
 
-        final ProductOption selectedProductOption = productController.finalProduct();
-        final Integer orderId = getOrderId(customer.getCustomerId());
+        boolean continueShopping;
+        do {
+            final ProductOption selectedProductOption = productController.finalProduct();
+            final Integer orderId = getOrderId(customer.getCustomerId());
 
-        addToCart(customer.getCustomerId(), orderId, selectedProductOption.getProductOptionId());
+            addToCart(customer.getCustomerId(), orderId, selectedProductOption.getProductOptionId());
 
-        if (!askToContinueShopping()) {
-            handlePayment();
-        }
+            continueShopping = askToContinueShopping();
+        } while (continueShopping);
+
+        handlePayment();
     }
 
-    public boolean askToContinueShopping() {
-        String input = orderView.askToContinueShoppingInput();
 
-        if (input.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
-            productController.chooseProductType();
-            return true;
-        } else if (input.equalsIgnoreCase(OrderMessage.ANSWER_NO.getMessage())) {
-            handlePayment();
-            return false;
-        } else {
-            orderView.displayMessage(ErrorMessage.INVALID_INPUT.getMessage());
-            return askToContinueShopping();
-        }
+    private boolean askToContinueShopping() {
+        return orderView.askToContinueShoppingInput()
+                .equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage());
     }
 
     public void handlePayment() {

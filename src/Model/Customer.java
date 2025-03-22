@@ -76,10 +76,7 @@ public class Customer {
         this.municipality = municipality;
     }
 
-    @Override
-    public String toString() {
-        return "Välkommen " + firstName + " " + lastName;
-    }
+
 }
 
 
