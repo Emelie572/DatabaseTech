@@ -1,6 +1,8 @@
 package Model;
+import Interface.Name;
 
-public class Product {
+
+public class Product implements Name{
 
     private int productId;
     private String productName;
@@ -20,9 +22,6 @@ public class Product {
         return productId;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
 
     public String getProductName() {
         return productName;
@@ -38,6 +37,16 @@ public class Product {
 
     public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
+    }
+
+    @Override
+    public String getName() {
+        return productName;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
 

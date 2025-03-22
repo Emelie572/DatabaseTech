@@ -56,8 +56,10 @@ public class OrderController {
         String input = orderView.askToContinueShoppingInput();
 
         if (input.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
+            productController.chooseProductType();
             return true;
         } else if (input.equalsIgnoreCase(OrderMessage.ANSWER_NO.getMessage())) {
+            handlePayment();
             return false;
         } else {
             orderView.displayMessage(ErrorMessage.INVALID_INPUT.getMessage());

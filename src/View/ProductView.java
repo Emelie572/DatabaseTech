@@ -1,6 +1,7 @@
 package View;
 
 import Interface.MessageDisplay;
+import Interface.Name;
 import Model.ProductType;
 import java.util.List;
 import java.util.Scanner;
@@ -46,7 +47,7 @@ public class ProductView implements MessageDisplay {
         System.out.println(productTypes.getProductTypeName());
     }
 
-    public void showItems(List<?> items) {
+    public void showItems(List<? extends Name> items) {
         items.forEach(item -> System.out.println("- " + item.toString()));
     }
 }

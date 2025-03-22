@@ -1,6 +1,8 @@
 package Model;
 
-public class ProductCategory {
+import Interface.Name;
+
+public class ProductCategory implements Name {
 
     private int productCategoryId;
     private String productCategoryName;
@@ -30,4 +32,14 @@ public class ProductCategory {
         this.productCategoryName = productCategoryName;
     }
 
+    @Override
+    public String getName() {
+        return productCategoryName;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
+

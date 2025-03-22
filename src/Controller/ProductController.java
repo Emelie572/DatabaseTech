@@ -1,5 +1,6 @@
 package Controller;
 
+import Interface.Name;
 import Model.*;
 import Repository.ProductRepository;
 import View.ProductView;
@@ -71,7 +72,7 @@ public class ProductController {
         return null;
     }
 
-    public <T> T chooseFromList(List<T> items, ProductMessage message, ErrorMessage errorMessage) {
+    public <T extends Name> T chooseFromList(List<T> items, ProductMessage message, ErrorMessage errorMessage) {
         T selectedItem = null;
         while (selectedItem == null) {
             productView.showItems(items);
@@ -90,14 +91,15 @@ public class ProductController {
         return selectedItem;
     }
 
-    public <T> T findItem(String choice, List<T> items) {
+    public <T extends Name> T findItem(String choice, List<T> items) {
         for (T item : items) {
-            if (item.toString().equalsIgnoreCase(choice)) {
+            if (item.getName().equalsIgnoreCase(choice)) {
                 return item;
             }
         }
         return null;
     }
+
 
     public ProductOption finalProduct() {
         ProductType productType = chooseProductType();
