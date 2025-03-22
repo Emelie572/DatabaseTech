@@ -7,7 +7,10 @@ public enum ErrorMessage {
     PRODUCT_OPTION_NOT_FOUND("Produktvalet finns ej"),
     COLOR_NOT_FOUND("Färgen finns ej, försök igen"),
     TRY_AGAIN("Försök igen"),
-    SIZE_NOT_FOUND("Ogiltig storlek, vänligen ange ett nummer");
+    ADD_PRODUCT_FAILED("Det gick inte att lägga till varan i varukorgen.Försök igen"),
+    SIZE_NOT_FOUND("Ogiltig storlek, vänligen ange ett nummer"),
+    NOT_LOGGED_IN("Du måste vara inloggad för att skapa en beställning."),
+    INVALID_INPUT("Ogiltig inmatning, försök igen");
 
     private final String message;
 

@@ -25,6 +25,7 @@ public class OrderRepository extends BaseRepository {
             stmt.setInt(3, productOptionId);
             stmt.execute();
             orderId = stmt.getInt(2);
+
         } catch (SQLException e) {
             System.out.println("Fel uppstod vid tillägg av varor till kundvagn: " + e.getMessage());
         }
@@ -54,6 +55,12 @@ public class OrderRepository extends BaseRepository {
         return customerOrders;
     }
 
+
+
+
+
+
+
     public OrderItem getOrderItemData(int orderId) {
         OrderItem orderItem = null;
 
@@ -74,37 +81,5 @@ public class OrderRepository extends BaseRepository {
         }
         return orderItem;
     }
-
-    public Integer createNewOrder(int customerId) {
-        // SQL-fråga för att skapa en ny order
-        String sql = "INSERT INTO CustomerOrders (customer_id, order_status) VALUES (?, ?)";
-
-        // Använd BaseRepository för att exekvera frågan
-        try {
-            // Förbered statementet för att exekvera frågan
-            try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setInt(1, customerId);
-                statement.setString(2, "aktiv"); // Standard status "aktiv"
-
-                // Exekvera uppdateringen och kontrollera att en rad påverkas
-                int affectedRows = statement.executeUpdate();
-
-                if (affectedRows > 0) {
-                    // Om en rad påverkades, hämta det genererade orderId
-                    try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            return generatedKeys.getInt(1);  // Returnera det genererade orderId
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Fel vid skapande av ny order: " + e.getMessage());
-        }
-
-        // Om något går fel eller ingen rad påverkas, returnera null
-        return null;
-    }
-
 
 }

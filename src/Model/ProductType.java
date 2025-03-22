@@ -2,8 +2,11 @@ package Model;
 
 public class ProductType {
 
-    private final int productId;
-    private final String productTypeName;
+    private  int productId;
+    private  String productTypeName;
+
+    public ProductType() {
+    }
 
     public ProductType(int productId, String productTypeName) {
         this.productId = productId;

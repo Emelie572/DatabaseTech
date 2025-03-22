@@ -12,6 +12,7 @@ public enum OrderMessage {
     ORDER_PAYMENT_DENIED("Betalningen gick ej igenom, ordern avbryts"),
     ORDER_READY_TO_PAY("Betala"),
     ANSWER_YES("Ja"),
+    ANSWER_NO("Nej"),
     FINAL_PRODUCTS("Produkter i varukorgen: ");
 
 

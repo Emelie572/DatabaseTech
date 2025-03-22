@@ -17,6 +17,14 @@ public class OrderView implements MessageDisplay {
         return scanner.nextLine().trim();
     }
 
+    public String askToContinueShoppingInput() {
+        return getUserInput(OrderMessage.ORDER_CONTINUE_SHOPPING);
+    }
+
+    public String handlePaymentInput() {
+        return getUserInput(OrderMessage.ORDER_PAY);
+    }
+
     public void displayMessage(OrderMessage message) {
         System.out.println(message.getMessage());
     }

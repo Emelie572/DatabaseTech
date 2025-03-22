@@ -5,10 +5,11 @@ import Model.Customer;
 import Enum.LoginMessage;
 import View.CustomerView;
 
-
 public class CustomerController {
+    private static final int MAX_ATTEMPTS = 3;
     private final CustomerRepository customerRepository;
     private final CustomerView customerView;
+    private Customer loggedInCustomer;
 
     public CustomerController(CustomerRepository customerRepository, CustomerView customerView) {
         this.customerRepository = customerRepository;
@@ -16,7 +17,6 @@ public class CustomerController {
     }
 
     public void processLogin() {
-        final int MAX_ATTEMPTS = 3;
         int attempts = 0;
 
         while (attempts < MAX_ATTEMPTS) {
@@ -24,25 +24,37 @@ public class CustomerController {
             String userPassword = customerView.getUserInput(LoginMessage.LOGIN_PASSWORD);
 
             if (authenticateUser(userName, userPassword)) {
+                customerView.displayMessage(LoginMessage.LOGIN_RIGHT);
                 return;
             }
+
             attempts++;
-            customerView.displayMessage(LoginMessage.LOGIN_WRONG);
+            if (attempts < MAX_ATTEMPTS) {
+                customerView.displayMessage(LoginMessage.LOGIN_WRONG);
+            }
         }
+
         customerView.displayMessage(LoginMessage.FAILED_ATTEMPTS);
     }
 
-
     private boolean authenticateUser(String userName, String userPassword) {
+        if (userName == null || userPassword == null || userName.trim().isEmpty() || userPassword.trim().isEmpty()) {
+            customerView.displayMessage(LoginMessage.LOGIN_WRONG);
+            return false;
+        }
+
         Customer customer = customerRepository.getLoginData(userName, userPassword);
 
         if (customer == null) {
             return false;
         }
 
+        this.loggedInCustomer = customer;
         customerView.showCustomerInfo(customer.getFirstName() + " " + customer.getLastName());
         return true;
     }
+
+    public Customer getLoggedInCustomer() {
+        return loggedInCustomer;
+    }
 }
-
-

@@ -1,87 +1,83 @@
 package Controller;
+
 import Model.*;
 import Repository.OrderRepository;
-import Repository.ProductRepository;
 import View.OrderView;
-import java.util.List;
 import Enum.ErrorMessage;
 import Enum.OrderMessage;
-import Enum.OrderStatus;
-import Enum.ProductMessage;
+
 
 public class OrderController {
 
     private final ProductController productController;
     private final OrderRepository orderRepository;
     private final OrderView orderView;
+    private final CustomerController customerController;
 
-    public OrderController(ProductController productController, OrderRepository orderRepository, OrderView orderView) {
+    public OrderController(ProductController productController, OrderRepository orderRepository, OrderView orderView, CustomerController customerController) {
         this.productController = productController;
         this.orderRepository = orderRepository;
         this.orderView = orderView;
+        this.customerController = customerController;
     }
 
     public Integer getOrderId(int customerId) {
         return orderRepository.getCustomerOrderData().stream()
-                .filter(order -> order.getCustomerId() == customerId &&
-                        OrderStatus.ACTIVE_ORDER.getMessage().equals(order.getOrderStatus()))
+                .filter(order -> order.getCustomerId() == customerId && "AKTIV".equals(order.getOrderStatus()))
                 .map(CustomerOrder::getOrderId)
                 .findFirst()
                 .orElse(null);
     }
 
-    public void orderFlow() {
-        prepareOrder();
-        askContinueShopping();
+    public void addToCart(int customerId, Integer orderId, int productOptionId) {
+        orderRepository.addToCart(customerId, orderId, productOptionId);
+        orderView.displayMessage(OrderMessage.ORDER_ADD_UPDATE);
     }
 
     public void prepareOrder() {
-        List<CustomerOrder> customer = orderRepository.getCustomerOrderData();
-        Product selectedProduct = productController.getSelectedProduct();
-        ProductOption selectedProductOption = productController.getProductOption(selectedProduct);
+        final Customer customer = customerController.getLoggedInCustomer();
 
-        if (selectedProductOption == null) {
-            orderView.displayMessage(ProductMessage.CHOOSE_PRODUCT.getMessage());
+        if (customer == null) {
+            orderView.displayMessage(ErrorMessage.NOT_LOGGED_IN.getMessage());
             return;
         }
 
-        Integer orderId = getOrderId(customer.get(0).getCustomerId());
-        addToCart(customer.get(0).getCustomerId(), orderId, selectedProductOption.getProductOptionId());
-    }
+        final ProductOption selectedProductOption = productController.finalProduct();
+        final Integer orderId = getOrderId(customer.getCustomerId());
 
+        addToCart(customer.getCustomerId(), orderId, selectedProductOption.getProductOptionId());
 
-    public void addToCart(int customerId, Integer orderId, int productOptionId) {
-        orderRepository.addToCart(customerId, orderId, productOptionId);
-        orderView.displayMessage(OrderMessage.ORDER_ADD_UPDATE.getMessage());
-    }
-
-
-    public void askContinueShopping() {
-        String input = orderView.getUserInput(OrderMessage.ORDER_CONTINUE_SHOPPING);
-
-        if (input.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
-            productController.productFlow();
-        } else if (input.equalsIgnoreCase(OrderMessage.ORDER_READY_TO_PAY.getMessage())) {
-            displayFinalOrder();
+        if (!askToContinueShopping()) {
             handlePayment();
         }
     }
 
-    public void displayFinalOrder() {
-        orderView.displayMessage(OrderMessage.FINAL_PRODUCTS.getMessage());
-        String productDetails = productController.getSelectedProduct().getProductName() + ", " +
-                productController.getSelectedColor() + ", " +
-                productController.getSelectedSize();
-        orderView.displayMessage(productDetails);
+    public boolean askToContinueShopping() {
+        String input = orderView.askToContinueShoppingInput();
+
+        if (input.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
+            return true;
+        } else if (input.equalsIgnoreCase(OrderMessage.ANSWER_NO.getMessage())) {
+            return false;
+        } else {
+            orderView.displayMessage(ErrorMessage.INVALID_INPUT.getMessage());
+            return askToContinueShopping();
+        }
     }
 
-
     public void handlePayment() {
-        final String inputPay = orderView.getUserInput(OrderMessage.ORDER_PAY);
-        if (inputPay.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
-            orderView.displayMessage(OrderMessage.ORDER_PAY_UPDATE.getMessage());
-        } else {
-            orderView.displayMessage(OrderMessage.ORDER_PAYMENT_DENIED.getMessage());
+        while (true) {
+            String inputPay = orderView.handlePaymentInput();
+
+            if (inputPay.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
+                orderView.displayMessage(OrderMessage.ORDER_PAY_UPDATE.getMessage());
+                return;
+            } else if (inputPay.equalsIgnoreCase(OrderMessage.ANSWER_NO.getMessage())) {
+                orderView.displayMessage(OrderMessage.ORDER_PAYMENT_DENIED.getMessage());
+                return;
+            } else {
+                orderView.displayMessage(ErrorMessage.INVALID_INPUT.getMessage());
+            }
         }
     }
 }

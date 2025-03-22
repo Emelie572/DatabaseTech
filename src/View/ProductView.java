@@ -1,13 +1,11 @@
 package View;
 
 import Interface.MessageDisplay;
-import Model.ProductCategory;
-import Model.ProductOption;
 import Model.ProductType;
-import Model.Product;
 import java.util.List;
 import java.util.Scanner;
 import Enum.ProductMessage;
+import Enum.ErrorMessage;
 
 
 public class ProductView implements MessageDisplay {
@@ -18,11 +16,24 @@ public class ProductView implements MessageDisplay {
     }
 
     public String getUserInput(ProductMessage prompt) {
-        displayMessage(prompt);
+        displayProductMessage(prompt);
         return scanner.nextLine().trim();
     }
 
-    public void displayMessage(ProductMessage message) {
+    public String getColorInput() {
+        return getUserInput(ProductMessage.CHOOSE_COLOR);
+    }
+
+    public String getSizeInput() {
+        return getUserInput(ProductMessage.CHOOSE_SIZE);
+    }
+
+    public void showErrorMessage(ErrorMessage errorMessage) {
+        System.out.println(errorMessage.getMessage());
+    }
+
+
+    public void displayProductMessage(ProductMessage message) {
         System.out.println(message.getMessage());
     }
 
@@ -35,12 +46,8 @@ public class ProductView implements MessageDisplay {
         System.out.println(productTypes.getProductTypeName());
     }
 
-    public void showProductCategories(List<ProductCategory> productCategories) {
-        productCategories.forEach(category -> System.out.println("- " + category.getProductCategoryName()));
-    }
-
-    public void showProducts(List<Product> products) {
-        products.forEach(product -> System.out.println("- " + product.getProductName()));
+    public void showItems(List<?> items) {
+        items.forEach(item -> System.out.println("- " + item.toString()));
     }
 }
 

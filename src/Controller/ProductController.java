@@ -5,248 +5,116 @@ import Repository.ProductRepository;
 import View.ProductView;
 import Enum.ProductMessage;
 import Enum.ErrorMessage;
-
-import java.util.ArrayList;
 import java.util.List;
-
 
 public class ProductController {
     private final ProductRepository productRepository;
     private final ProductView productView;
-    private Product selectedProduct;
-    private String selectedColor;
-    private int selectedSize;
-
 
     public ProductController(ProductRepository productRepository, ProductView productView) {
         this.productRepository = productRepository;
         this.productView = productView;
     }
 
-    public void productFlow() {
-        final ProductType productType = getProductType();
-        ProductType selectedProductType = chooseProductType(productType);
+    public ProductType chooseProductType() {
+        productView.showProductTypes(getProductType());
+        String selectedProductType = getUserInput(ProductMessage.CHOOSE_PRODUCT_TYPE);
 
-        List<ProductCategory> productCategories = getProductCategories(selectedProductType);
-        if (productCategories.isEmpty()) return;
-
-        ProductCategory selectedCategory = chooseProductCategory(productCategories);
-
-        List<Product> products = getProductsByCategory(selectedCategory);
-        if (products.isEmpty()) return;
-
-        Product selectedProduct = chooseProduct(products);
-        this.selectedProduct = selectedProduct;
-
-        ProductOption selectedOption = getProductOption(selectedProduct);
-        if (selectedOption == null) return;
-
-        this.selectedColor = selectedOption.getColor();
-        this.selectedSize = selectedOption.getSize();
-    }
-
-
-
-    public ProductType chooseProductType(ProductType productType) {
-        productView.showProductTypes(productType);
-        String selectedProductType = productView.getUserInput(ProductMessage.CHOOSE_PRODUCT_TYPE);
-
-        while (!productType.getProductTypeName().equalsIgnoreCase(selectedProductType)) {
-            productView.displayMessage(ErrorMessage.PRODUCT_TYPE_NOT_FOUND.getMessage());
-            selectedProductType = productView.getUserInput(ProductMessage.CHOOSE_PRODUCT_TYPE);
+        while (!isValidProductType(selectedProductType)) {
+            productView.showErrorMessage(ErrorMessage.PRODUCT_TYPE_NOT_FOUND);
+            selectedProductType = getUserInput(ProductMessage.CHOOSE_PRODUCT_TYPE);
         }
 
-        return productType;
+        return getProductType();
     }
 
+    public ProductCategory chooseProductCategory(ProductType productType) {
+        List<ProductCategory> productCategories = productRepository.getCategoryData(productType.getProductTypeName());
+        return chooseFromList(productCategories, ProductMessage.CHOOSE_PRODUCT_CATEGORY, ErrorMessage.CATEGORY_NOT_FOUND);
+    }
 
+    public Product chooseProduct(ProductCategory selectedCategory) {
+        List<Product> products = productRepository.getProductByCategoryData(selectedCategory.getProductCategoryName());
+        return chooseFromList(products, ProductMessage.CHOSEN_PRODUCT, ErrorMessage.PRODUCT_NOT_FOUND);
+    }
 
-    public ProductCategory chooseProductCategory(List<ProductCategory> productCategories) {
+    public ProductOption chooseProductOption(Product selectedProduct) {
+        List<ProductOption> productOptions = productRepository.getProductOptionData(selectedProduct.getProductName());
 
-        ProductCategory selectedCategory = null;
-        while (selectedCategory == null) {
-            productView.showProductCategories(productCategories);
-            final String categoryChoice = productView.getUserInput(ProductMessage.CHOOSE_PRODUCT_CATEGORY);
+        String inputColor = productView.getColorInput();
+        String inputSize = productView.getSizeInput();
 
-            if (categoryChoice == null || categoryChoice.trim().isEmpty()) {
-                productView.displayMessage(ErrorMessage.CATEGORY_NOT_FOUND.getMessage());
+        ProductOption selectedProductOption = findProductOption(inputColor, inputSize, productOptions);
+
+        if (selectedProductOption == null) {
+            productView.showErrorMessage(ErrorMessage.COLOR_NOT_FOUND);
+            return null;
+        }
+
+        productView.displayMessage(ProductMessage.CHOSEN_PRODUCT + ": " + selectedProductOption);
+        return selectedProductOption;
+    }
+
+    public ProductOption findProductOption(String color, String size, List<ProductOption> productOptions) {
+        int sizeInt;
+        try {
+            sizeInt = Integer.parseInt(size);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
+        for (ProductOption option : productOptions) {
+            if (option.getColor().equalsIgnoreCase(color) && option.getSize() == sizeInt) {
+                return option;
+            }
+        }
+        return null;
+    }
+
+    public <T> T chooseFromList(List<T> items, ProductMessage message, ErrorMessage errorMessage) {
+        T selectedItem = null;
+        while (selectedItem == null) {
+            productView.showItems(items);
+            String choice = getUserInput(message);
+
+            if (choice == null || choice.trim().isEmpty()) {
+                productView.showErrorMessage(errorMessage);
                 continue;
             }
 
-            selectedCategory = productCategories.stream()
-                    .filter(category -> category.getProductCategoryName().equalsIgnoreCase(categoryChoice))
-                    .findFirst()
-                    .orElse(null);
-
-            if (selectedCategory == null) {
-                productView.displayMessage(ErrorMessage.CATEGORY_NOT_FOUND.getMessage());
+            selectedItem = findItem(choice, items);
+            if (selectedItem == null) {
+                productView.showErrorMessage(errorMessage);
             }
         }
-
-        return selectedCategory;
+        return selectedItem;
     }
 
-
-    public Product chooseProduct(List<Product> products) {
-
-        Product selectedProduct = null;
-
-        while (selectedProduct == null) {
-            String productChoice;
-            productView.showProducts(products);
-            productChoice = productView.getUserInput(ProductMessage.CHOSEN_PRODUCT);
-
-            selectedProduct = products.stream()
-                    .filter(product -> product.getProductName().equalsIgnoreCase(productChoice))
-                    .findFirst()
-                    .orElse(null);
-
-            if (selectedProduct == null) {
-                productView.displayMessage(ErrorMessage.PRODUCT_NOT_FOUND.getMessage());
+    public <T> T findItem(String choice, List<T> items) {
+        for (T item : items) {
+            if (item.toString().equalsIgnoreCase(choice)) {
+                return item;
             }
         }
-
-        return selectedProduct;
+        return null;
     }
 
-
-    private ProductOption chooseColorOption(List<ProductOption> productOptions) {
-        productOptions.stream()
-                .map(ProductOption::getColor)
-                .distinct()
-                .forEach(productView::displayMessage);
-
-        ProductOption selectedOption = null;
-        while (selectedOption == null) {
-            String colorChoice = productView.getUserInput(ProductMessage.CHOOSE_COLOR);
-            selectedOption = productOptions.stream()
-                    .filter(option -> option.getColor().equalsIgnoreCase(colorChoice))
-                    .findFirst()
-                    .orElse(null);
-
-            if (selectedOption == null) {
-                productView.displayMessage(ErrorMessage.COLOR_NOT_FOUND.getMessage());
-            }
-        }
-        return selectedOption;
+    public ProductOption finalProduct() {
+        ProductType productType = chooseProductType();
+        ProductCategory selectedProductCategory = chooseProductCategory(productType);
+        Product selectedProduct = chooseProduct(selectedProductCategory);
+        return chooseProductOption(selectedProduct);
     }
 
-
-    private ProductOption chooseSizeOption(List<ProductOption> productOptions) {
-        productOptions.stream()
-                .map(option -> String.valueOf(option.getSize()))
-                .distinct()
-                .forEach(productView::displayMessage);
-
-        ProductOption selectedOption = null;
-        while (selectedOption == null) {
-            String sizeChoice = productView.getUserInput(ProductMessage.CHOOSE_SIZE);
-            try {
-                int size = Integer.parseInt(sizeChoice);
-                selectedOption = productOptions.stream()
-                        .filter(option -> option.getSize() == size)
-                        .findFirst()
-                        .orElse(null);
-            } catch (NumberFormatException ignored) {}
-
-            if (selectedOption == null) {
-                productView.displayMessage(ErrorMessage.SIZE_NOT_FOUND.getMessage());
-            }
-        }
-        return selectedOption;
+    public String getUserInput(ProductMessage message) {
+        return productView.getUserInput(message);
     }
 
-
-    public ProductOption getProductOption(Product product) {
-        if (isProductOptionSelected()) {
-            return createProductOption(getSelectedColor(), getSelectedSize());
-        }
-        return getUserSelectedProductOption(product);
+    public boolean isValidProductType(String selectedProductType) {
+        return getProductType().getProductTypeName().equalsIgnoreCase(selectedProductType);
     }
 
-    private boolean isProductOptionSelected() {
-        return getSelectedColor() != null && getSelectedSize() != 0;
-    }
-
-    private ProductOption createProductOption(String color, int size) {
-        ProductOption productOption = new ProductOption();
-        productOption.setColor(color);
-        productOption.setSize(size);
-        return productOption;
-    }
-
-    private ProductOption getUserSelectedProductOption(Product product) {
-        List<ProductOption> productOptions = getProductOptions(product);
-
-        ProductOption selectedColorOption = chooseColorOption(productOptions);
-        if (selectedColorOption == null) {
-            productView.displayMessage(ProductMessage.CHOOSE_COLOR.getMessage());
-            return null;
-        }
-
-        List<ProductOption> sizeOptions = filterSizeOptionsByColor(productOptions, selectedColorOption);
-        ProductOption selectedSizeOption = chooseSizeOption(sizeOptions);
-        if (selectedSizeOption == null) {
-            productView.displayMessage(ProductMessage.CHOOSE_SIZE.getMessage());
-            return null;
-        }
-
-        return createProductOption(selectedColorOption.getColor(), selectedSizeOption.getSize());
-    }
-
-    private List<ProductOption> filterSizeOptionsByColor(List<ProductOption> options, ProductOption colorOption) {
-        return options.stream()
-                .filter(option -> option.getColor().equalsIgnoreCase(colorOption.getColor()))
-                .toList();
-    }
-
-
-
-    private ProductType getProductType() {
+    public ProductType getProductType() {
         return productRepository.getProductTypeData();
     }
-
-    private List<ProductCategory> getProductCategories(ProductType productType) {
-        List<ProductCategory> productCategories = productRepository.getCategoryData(productType.getProductTypeName());
-
-        if (productCategories == null || productCategories.isEmpty()) {
-            productView.displayMessage(ErrorMessage.CATEGORY_NOT_FOUND.getMessage());
-            return new ArrayList<>();
-        }
-
-        return productCategories;
-    }
-
-    List<Product> getProductsByCategory(ProductCategory category) {
-        List<Product> products = productRepository.getProductByCategoryData(category.getProductCategoryName());
-
-        if (products == null || products.isEmpty()) {
-            productView.displayMessage(ErrorMessage.PRODUCT_NOT_FOUND.getMessage());
-            return new ArrayList<>();
-        }
-        return products;
-    }
-
-    List<ProductOption> getProductOptions(Product product) {
-        List<ProductOption> productOptions = productRepository.getProductOptionData(product.getProductName());
-
-        if (productOptions == null || productOptions.isEmpty()) {
-            productView.displayMessage(ErrorMessage.PRODUCT_OPTION_NOT_FOUND.getMessage());
-            return new ArrayList<>();
-        }
-        return productOptions;
-    }
-
-    public Product getSelectedProduct() {
-        return selectedProduct;
-    }
-
-    public String getSelectedColor() {
-        return this.selectedColor;
-    }
-
-    public int getSelectedSize() {
-        return this.selectedSize;
-    }
-
 }
