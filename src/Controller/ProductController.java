@@ -55,7 +55,7 @@ public class ProductController {
             throw new IllegalArgumentException(ErrorMessage.PRODUCT_OPTION_NOT_FOUND.getMessage());
         }
 
-        showItems(productOptions);
+        handleItems(productOptions);
 
         String chosenColor = handleUserInput(ProductMessage.CHOOSE_COLOR);
         int chosenSize = getValidSize(ProductMessage.CHOOSE_SIZE);
@@ -88,7 +88,7 @@ public class ProductController {
 
         T selectedItem = null;
         while (selectedItem == null) {
-            showItems(items);
+            handleItems(items);
             String choice = handleUserInput(message);
 
             if (choice == null || choice.trim().isEmpty()) {
@@ -128,7 +128,7 @@ public class ProductController {
         return productView.getUserInput(message);
     }
 
-    public void showItems(List<? extends Name> items) {
+    public void handleItems(List<? extends Name> items) {
         productView.showItems(items);
     }
 }

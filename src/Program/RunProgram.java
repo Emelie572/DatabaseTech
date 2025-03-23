@@ -39,7 +39,6 @@ public class RunProgram {
 
 
         customerController.processLogin();
-        productController.chooseProductType();
         orderController.prepareOrder();
 
     }

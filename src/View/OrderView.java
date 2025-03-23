@@ -15,7 +15,7 @@ public class OrderView implements MessageDisplay {
     }
 
     public String getUserInput(OrderMessage prompt) {
-        displayOrderMessage(prompt);
+        showOrderMessage(prompt);
         return scanner.nextLine().trim();
     }
 
@@ -35,9 +35,6 @@ public class OrderView implements MessageDisplay {
         System.out.println(orderMessage.getMessage());
     }
 
-    public void displayOrderMessage(OrderMessage message) {
-        System.out.println(message.getMessage());
-    }
 
     @Override
     public void displayMessage(String message) {

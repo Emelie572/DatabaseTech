@@ -14,7 +14,7 @@ public class CustomerView implements MessageDisplay {
     }
 
     public String getUserInput(LoginMessage prompt) {
-        displayMessage(prompt);
+        showLoginMessage(prompt);
         return scanner.nextLine().trim();
     }
 
@@ -28,6 +28,10 @@ public class CustomerView implements MessageDisplay {
 
     public void showErrorMessage(ErrorMessage errorMessage) {
         System.out.println(errorMessage.getMessage());
+    }
+
+    public void showLoginMessage(LoginMessage message) {
+        System.out.println(message.getMessage());
     }
 
     @Override

@@ -17,7 +17,7 @@ public class ProductView implements MessageDisplay {
     }
 
     public String getUserInput(ProductMessage prompt) {
-        displayProductMessage(prompt);
+        showProductMessage(prompt);
         return scanner.nextLine().trim();
     }
 
@@ -26,11 +26,7 @@ public class ProductView implements MessageDisplay {
         System.out.println(errorMessage.getMessage());
     }
 
-    public void showProductMessage(ProductMessage productMessage) {
-        System.out.println(productMessage.getMessage());
-    }
-
-    public void displayProductMessage(ProductMessage message) {
+    public void showProductMessage(ProductMessage message) {
         System.out.println(message.getMessage());
     }
 
@@ -42,5 +38,6 @@ public class ProductView implements MessageDisplay {
     public void showItems(List<? extends Name> items) {
         items.forEach(item -> System.out.println("- " + item.toString()));
     }
+
 }
 

@@ -54,10 +54,6 @@ public class CustomerController {
         return true;
     }
 
-    private void handleErrorMessage(ErrorMessage message) {
-        customerView.showErrorMessage(message);
-    }
-
     public void handleCustomerInfo() {
         customerView.showCustomerInfo();
     }
@@ -72,5 +68,9 @@ public class CustomerController {
 
     public Customer getLoggedInCustomer() {
         return loggedInCustomer;
+    }
+
+    private void handleErrorMessage(ErrorMessage message) {
+        customerView.showErrorMessage(message);
     }
 }
