@@ -1,6 +1,8 @@
 package Model;
 
-public class ProductType {
+import Interface.Name;
+
+public class ProductType implements Name {
 
     private  int productId;
     private  String productTypeName;
@@ -22,9 +24,13 @@ public class ProductType {
         return productTypeName;
     }
 
+    @Override
+    public String getName() {
+        return productTypeName;
+    }
 
     @Override
     public String toString() {
-        return productTypeName;
+        return getName();
     }
 }

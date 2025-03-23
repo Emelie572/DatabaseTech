@@ -2,6 +2,8 @@ package View;
 
 import Interface.MessageDisplay;
 import Enum.OrderMessage;
+import Enum.ErrorMessage;
+
 
 import java.util.Scanner;
 
@@ -13,7 +15,7 @@ public class OrderView implements MessageDisplay {
     }
 
     public String getUserInput(OrderMessage prompt) {
-        displayMessage(prompt);
+        displayOrderMessage(prompt);
         return scanner.nextLine().trim();
     }
 
@@ -25,7 +27,15 @@ public class OrderView implements MessageDisplay {
         return getUserInput(OrderMessage.ORDER_PAY);
     }
 
-    public void displayMessage(OrderMessage message) {
+    public void showErrorMessage(ErrorMessage errorMessage) {
+        System.out.println(errorMessage.getMessage());
+    }
+
+    public void showOrderMessage(OrderMessage orderMessage) {
+        System.out.println(orderMessage.getMessage());
+    }
+
+    public void displayOrderMessage(OrderMessage message) {
         System.out.println(message.getMessage());
     }
 

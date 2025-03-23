@@ -31,7 +31,7 @@ public class OrderController {
 
     public void addToCart(int customerId, Integer orderId, int productOptionId) {
         orderRepository.addToCart(customerId, orderId, productOptionId);
-        orderView.displayMessage(OrderMessage.ORDER_ADD_UPDATE);
+        handleOrderMessage(OrderMessage.ORDER_ADD_UPDATE);
     }
 
 
@@ -39,7 +39,7 @@ public class OrderController {
         final Customer customer = customerController.getLoggedInCustomer();
 
         if (customer == null) {
-            orderView.displayMessage(ErrorMessage.NOT_LOGGED_IN.getMessage());
+            handleErrorMessage(ErrorMessage.NOT_LOGGED_IN);
             return;
         }
 
@@ -56,25 +56,41 @@ public class OrderController {
         handlePayment();
     }
 
+    private void handleErrorMessage(ErrorMessage message) {
+        orderView.showErrorMessage(message);
+    }
+
+    public String handleUserInput(OrderMessage message) {
+        return orderView.getUserInput(message);
+    }
 
     private boolean askToContinueShopping() {
         return orderView.askToContinueShoppingInput()
                 .equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage());
     }
 
+    public String handlePaymentInput() {
+        return orderView.getUserInput(OrderMessage.ORDER_PAY);
+    }
+
+    private void handleOrderMessage(OrderMessage message) {
+        orderView.showOrderMessage(message);
+    }
+
     public void handlePayment() {
         while (true) {
-            String inputPay = orderView.handlePaymentInput();
+            String inputPay = handlePaymentInput();
 
             if (inputPay.equalsIgnoreCase(OrderMessage.ANSWER_YES.getMessage())) {
-                orderView.displayMessage(OrderMessage.ORDER_PAY_UPDATE.getMessage());
+                handleOrderMessage(OrderMessage.ORDER_PAY_UPDATE);
                 return;
             } else if (inputPay.equalsIgnoreCase(OrderMessage.ANSWER_NO.getMessage())) {
-                orderView.displayMessage(OrderMessage.ORDER_PAYMENT_DENIED.getMessage());
+                handleOrderMessage(OrderMessage.ORDER_PAYMENT_DENIED);
                 return;
             } else {
-                orderView.displayMessage(ErrorMessage.INVALID_INPUT.getMessage());
+                handleErrorMessage(ErrorMessage.INVALID_INPUT);
             }
         }
     }
+
 }

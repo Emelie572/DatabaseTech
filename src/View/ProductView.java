@@ -21,18 +21,14 @@ public class ProductView implements MessageDisplay {
         return scanner.nextLine().trim();
     }
 
-    public String getColorInput() {
-        return getUserInput(ProductMessage.CHOOSE_COLOR);
-    }
-
-    public String getSizeInput() {
-        return getUserInput(ProductMessage.CHOOSE_SIZE);
-    }
 
     public void showErrorMessage(ErrorMessage errorMessage) {
         System.out.println(errorMessage.getMessage());
     }
 
+    public void showProductMessage(ProductMessage productMessage) {
+        System.out.println(productMessage.getMessage());
+    }
 
     public void displayProductMessage(ProductMessage message) {
         System.out.println(message.getMessage());
@@ -41,10 +37,6 @@ public class ProductView implements MessageDisplay {
     @Override
     public void displayMessage(String message) {
         System.out.println(message);
-    }
-
-    public void showProductTypes(ProductType productTypes) {
-        System.out.println(productTypes.getProductTypeName());
     }
 
     public void showItems(List<? extends Name> items) {

@@ -3,6 +3,8 @@ package View;
 import Interface.MessageDisplay;
 import Enum.LoginMessage;
 import java.util.Scanner;
+import Enum.ErrorMessage;
+
 
 public class CustomerView implements MessageDisplay {
     private final Scanner scanner;
@@ -20,8 +22,12 @@ public class CustomerView implements MessageDisplay {
         System.out.println(message.getMessage());
     }
 
-    public void showCustomerInfo(String customerName) {
+    public void showCustomerInfo() {
         displayMessage(LoginMessage.LOGIN_RIGHT);
+    }
+
+    public void showErrorMessage(ErrorMessage errorMessage) {
+        System.out.println(errorMessage.getMessage());
     }
 
     @Override

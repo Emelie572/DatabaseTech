@@ -18,8 +18,8 @@ public class ProductRepository extends BaseRepository{
     public ProductRepository() {
     }
 
-    public ProductType getProductTypeData() {
-        ProductType productType = null;
+    public List<ProductType> getProductTypeData() {
+        List<ProductType> productTypes = new ArrayList<>();
 
         try (PreparedStatement stmt = connection.prepareStatement(
                 "select product_type_id, product_type_name from ProductType")) {
@@ -27,14 +27,15 @@ public class ProductRepository extends BaseRepository{
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                int id = rs.getInt("product_type_id");
-                String name = rs.getString("product_type_name");
-                productType = new ProductType(id, name);
+                ProductType productType = new ProductType(
+                rs.getInt("product_type_id"),
+                rs.getString("product_type_name"));
+                productTypes.add(productType);
             }
         } catch (SQLException e) {
             System.out.println("Fel uppstod vid hämtning av produkttyp " + e.getMessage());
         }
-        return productType;
+        return productTypes;
     }
 
     public List<ProductCategory> getCategoryData(String productTypeName) {

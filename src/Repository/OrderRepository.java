@@ -15,7 +15,9 @@ public class OrderRepository extends BaseRepository {
     }
 
     public Integer addToCart(int customerId, Integer orderId, int productOptionId) {
+
         try (CallableStatement stmt = connection.prepareCall("call AddToCart(?,?,?)")) {
+
             stmt.setInt(1, customerId);
             if (orderId == null) {
                 stmt.setNull(2, Types.INTEGER);
